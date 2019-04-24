@@ -1,0 +1,18 @@
+function cT_Headways
+    load('cT_CarFollowing.mat')
+    load('cT_Setup.mat');
+    load('cT_Feedback.mat');
+    load('cT_SDE.mat');
+    load('cT_U0.mat');
+    
+    size(K_tk)
+   
+    figure('Name','Headways')
+    plot(t,K_tk);
+    %axis([0 60 -50 100]);
+    xlabel(str1,'Interpreter','latex') 
+    ylabel(str8,'Interpreter','latex')
+    title('Modified Driver Behavior')
+    
+    saveas(gcf,'Figure3.pdf')  
+end
