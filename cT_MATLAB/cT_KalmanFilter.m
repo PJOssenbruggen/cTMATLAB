@@ -3,7 +3,7 @@ function cT_KalmanFilter(Q,R)
         load('cT_Setup.mat');
         load('cT_Trial_Table.mat');
         load('cT_Feedback.mat');
-        load('cT_U0.mat');
+        load('U_tk.mat');
         W  = 0*ones(n,nTrials);
         Y  = 0*ones(n,nTrials);
         Yf = 0*ones(n,nTrials);
@@ -43,37 +43,45 @@ function cT_KalmanFilter(Q,R)
             Yf(:,k) = correct*Yf(:,k);
             Ym(:,k) = correct*Ym(:,k);
         end
-% Calculate means and SDs
-        W_mn  = 0*ones(nTrials-1,1);
-        W_sd  = 0*ones(nTrials-1,1);
-        Yf_mn = 0*ones(nTrials-1,1);
-        Yf_sd = 0*ones(nTrials-1,1);
-        Ym_mn = 0*ones(nTrials-1,1);
-        Ym_sd = 0*ones(nTrials-1,1);
-        for k = 1:nTrials
-            W_mn(k)  = mean(W(100:n,k));
-            W_sd(k)  = std(W(100:n,k));
-            Yf_mn(k) = mean(Yf(100:n,k));
-            Yf_sd(k) = std(Yf(100:n,k));
-            Ym_mn(k) = mean(Ym(100:n,k));
-            Ym_sd(k) = std(Ym(100:n,k));
+% Calculate means and SDs of KF speed: u_kf
+    for k = 1:nTrials
+        U_mn(k) = mean(Yf(101:n,k));
+        U_sd(k) = std(Yf(101:n,k));
+    end
+    T = table(U_mn, U_sd)
+    mean(U_mn)
+    std(U_mn)
+% Calculate means and SDs of KF speed: w
+    for k = 1:nTrials
+        if i == 1
+            w  = U_tk(101:n,k);
         end
-    
-    T = table(W_mn, W_sd, Yf_mn, Yf_sd, Ym_mn, Ym_sd) 
+            w  = [w; U_tk(101:n,k)]; 
+    end
+    W_mn = mean(w);
+    W_sd = std(w); 
+    T = table(W_mn, W_sd) 
+    mean(W_mn)
+    std(W_mn)
+    mean(v)
+    std(v)
 %Plots     
-        figure('Name','KalmanFilter')
-        for k = 1:nTrials
-            subplot(2,2,k)
-            plot(t,W(:,k),'k-')
-            hold on
-            plot(t,Yf(:,k),'r-','LineWidth',3)
-            hold on
-            plot(t,Y_star,'b--','LineWidth',1)
-            xlabel(str1,'Interpreter','latex')
-            ylabel(str3,'Interpreter','latex')
-            axis([0 60 0 120]);
-            title(['Vehicle ',num2str(k),''])
-            legend('w','y','u^*','Location','southeast')
-        end 
-        saveas(gcf,'Figure5.pdf')
+    figure('Name','KalmanFilter')
+    for k = 1:nTrials
+        subplot(2,2,k)
+        plot(t,W(:,k),'k-')
+        hold on
+        plot(t,Yf(:,k),'r-','LineWidth',3)
+        hold on
+        plot(t,Y_star,'b--','LineWidth',1)
+        xlabel(str11,'Interpreter','latex')
+        ylabel(str3,'Interpreter','latex')
+        axis([0 60 0 120]);
+        title(['Vehicle ',num2str(k),''])
+        lgd = legend('w','y','u^*','Location','southeast');
+        w = lgd.FontWeight;
+        y = lgd.FontWeight;
+        lgd.FontWeight = 'bold';
+    end 
+    saveas(gcf,'Figure5.pdf')
 end    

@@ -13,8 +13,9 @@ cd /Users/PJO/Desktop/cT_MATLAB
     cT_Feedback(Qa,Ra);
 % Step 2. Study the affects Traffic volatity. Figure 2 %%%%%%%%%%%%%%%%%%%%
     nTrials = 4;
-    Vspeed  = [70; 85; 80; 65]; % Vehicle speeds
-    sigma   = [2.5; 2; 3; 1]; % Vehicle speed volatility
+    Vspeed  = [85; 70; 80; 65]; % Vehicle speeds
+    sigma   = [4; 2; 3; 1]; % Vehicle speed volatility
+ % Vehicle speed volatility
     Trial_Table = [Vspeed, sigma];
     save cT_Trial_Table.mat
     [X0,U0,Sigma] = cT_U0(nTrials,Vspeed,sigma);
@@ -22,14 +23,15 @@ cd /Users/PJO/Desktop/cT_MATLAB
     cT_SDE(nTrials,X0,Vspeed,sigma);
 % Step 3. Study Headways Figure 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     for Lead = 1:nTrials-1
+        if Lead == 1
+            save Lead.mat
+        end
         cT_CarFollowing(Lead);   
     end
-    load('cT_CarFollowing.mat')
-    
-    cT_Headways(K_t)
+    cT_Headways
     
 % Step 5. Kalman Filter
-    Q  = 625;   % 
-    R  = 25;    % Noise Variance
+    Q  = 625;  % Disturbance
+    R  = 1;    % Noise Variance
     cT_KalmanFilter(Q,R)
     

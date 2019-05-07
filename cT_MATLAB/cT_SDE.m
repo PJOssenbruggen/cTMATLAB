@@ -5,8 +5,9 @@ function cT_SDE(nTrials,X0,Vspeed,sigma)
         load('cT_Feedback.mat');
         load('cT_U0.mat');
 % Create speed, location matrices for the trials.
-        U_tk   = 0*ones(n,nTrials); % speed
-    	X_tk   = 0*ones(n,nTrials); % distance travelled
+        U_tk   = 0*ones(n,nTrials);   % speed
+    	X_tk   = 0*ones(n,nTrials);   % distance travelled
+        
 % Plot
         figure('Name','SDE')
 % Estimate speed
@@ -25,7 +26,7 @@ function cT_SDE(nTrials,X0,Vspeed,sigma)
            plot(t,u_BM)
            hold on
            title('Driver Preferences')
-           xlabel(str1,'Interpreter','latex')
+           xlabel(str11,'Interpreter','latex')
            ylabel(str3,'Interpreter','latex')
         end
         
@@ -39,7 +40,7 @@ function cT_SDE(nTrials,X0,Vspeed,sigma)
            plot(T,S_BM)
            hold on
            axis([0 Tf -1500 6000]);
-           xlabel(str1,'Interpreter','latex')
+           xlabel(str11,'Interpreter','latex')
            ylabel(str2,'Interpreter','latex')
            title('Traffic Density Below Capacity')  
         end
@@ -49,7 +50,7 @@ function cT_SDE(nTrials,X0,Vspeed,sigma)
         for k = 1:nTrials
             for i = 1:n
                BM  = bm(Vspeed(k),sigma(k),'StartTime',0,'StartState',X0(k));
-               [S_BM,T] = simulate(BM, n, 'DeltaTime', dt, 'nTrials', 1);
+               [S_BM,T]  = simulate(BM, n, 'DeltaTime', dt, 'nTrials', 1);
                X_tk(:,k) = S_BM(1:n);
                dudt = diff(S_BM)/dt;
                dudt(1:100) = Y_cld(1:100,k);
@@ -58,11 +59,13 @@ function cT_SDE(nTrials,X0,Vspeed,sigma)
             plot(T,S_BM)
             axis([0 Tf -1500 6000]);
             hold on
-            xlabel(str1,'Interpreter','latex')
+            xlabel(str11,'Interpreter','latex')
             ylabel(str2,'Interpreter','latex')
             title('Traffic Density at Capacity') 
         end        
     saveas(gcf,'Figure2.pdf')
     save cT_SDE.mat
+    save U_tk.mat
+    save X_tk.mat
     end
  

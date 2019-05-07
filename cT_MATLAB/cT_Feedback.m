@@ -57,7 +57,7 @@ function  cT_Feedback(Qa,Ra)
     str = '$$ \textrm{Speed }\dot{x} \textrm{, feet per second (fps)} $$';
     ylabel(str,'Interpreter','latex')
     xlabel(str1,'Interpreter','latex') 
-    ylabel(str2,'Interpreter','latex')
+    ylabel(str3,'Interpreter','latex')
     
     subplot(2,1,2)
     plot(t,y_cl,'r-','LineWidth',3)
@@ -71,7 +71,7 @@ function  cT_Feedback(Qa,Ra)
     title('Model With Feedback Control')
     legend('Closed-Loop, ss_c_l', 'Closed-Loop ss_c_l_d','Target Speed, u^*','Comfortable acceleration = 10 fps^2.','Location','southeast')
     ylabel(str3,'Interpreter','latex')
-    xlabel(str1,'Interpreter','latex') 
+    xlabel(str11,'Interpreter','latex') 
     saveas(gcf,'Figure1.pdf')
 % Save data
     filename = 'cT_Feedback.mat';

@@ -9,17 +9,20 @@
     l  = 14;            % Vehicle length, feet
     dt = 0.1;           % Time step, second
     Ts = dt;
-    Tf = 60;   % Finish time, seconds 
+    Tf = 60;            % Finish time, seconds 
     t  = 0:dt:Tf;
     t  = t';
     n  = size(t,1);
 % Plot labels
     str1 = '$$ t, \textrm{ seconds} $$';
+    str11 = '$$ \kappa, \textrm{ seconds} $$';
     str2 = '$$ \textrm{Distance }x \textrm{, feet} $$';
     str3 = '$$ \textrm{Speed }\dot{x} \textrm{ (fps)} $$';
     str4 = '$$ \textrm{Headway }s \textrm{, feet} $$';
     str5 = '$$ \textrm{Frequency }$$';
-    str6 = '$$ \textrm{Flow }q \textrm{, vph} $$';
-    str7 = '$$ \textrm{Space headway }h \textrm{, feet} $$';
+    str6 = '$$ \textrm{Flow }\bar{q} \textrm{, vph} $$';
+    str7 = '$$ \textrm{Headway }h \textrm{, feet} $$';
     str8 = '$$ \textrm{Density }k \textrm{, vpm} $$';
+    str9 = '$$ \textrm{Speed }\bar{u} \textrm{, mph} $$';
+    str10 = '$$ \textrm{Density }\bar{k} \textrm{, vpm} $$';
     save cT_Setup.mat 
