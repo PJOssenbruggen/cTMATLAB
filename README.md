@@ -3,7 +3,7 @@ cTMATLAB is a respository of MATLAB code, data and figures.
 
 The cT_MATLAB folder contains the functions necessary to generate the tables and graphs described in the paper, "A Case for Feedback Control in Preventing Delay." See "manuscript.pdf".
 
-The "Bottleneck folder" contains the code that was used to generate the information contained in the "A Case Study: Managing Bottleneck Delay and Breakdown." A person interested in this work should peruse the material in the "Botteleneck folder" first. Much more care was taken in editing and organizing the material.
+The "Bottleneck folder" contains the code that was used to generate the information contained in the "A Case Study: Managing Bottleneck Delay and Breakdown." A person interested in this work should peruse the material in the "Bottleneck folder" first. Much more care was taken in editing and organizing the material.
 
 If you have questions or problems, send me an email at "pjo@unh.edu."
 
