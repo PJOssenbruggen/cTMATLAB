@@ -1,0 +1,19 @@
+function [u,sys] = Step134(cruise_sys,u_star,t)
+% Linear Quadratic Regulator (LQR) and speed u predictions
+    Q       = 10000;
+    R       = 1;
+    A       = cruise_sys.A;
+    B       = cruise_sys.B;
+    C       = cruise_sys.C;
+    D       = cruise_sys.D;
+    [y0,t,x00] = lsim(cruise_sys,u_star,t); 
+    [K,S,e] = lqr(A,B,Q,R);
+    % Rescale
+    Nbar    = rscale4(A,B,C,D,K);
+    Acl     = (A-B*K);
+    Bcl     = B;
+    Ccl     = C;
+    Dcl     = D;
+    sys     = ss(Acl,Nbar*Bcl,Ccl,Dcl);
+    [u,t,x] = lsim(sys,u_star,t);       
+end
