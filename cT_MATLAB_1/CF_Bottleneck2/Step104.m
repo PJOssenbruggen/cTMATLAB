@@ -1,0 +1,69 @@
+function [D1 D2 sys u_star] = Step104
+    % LQR Controller
+    load('cT_Setup.mat')
+    Ukf     = zeros(nr,nTrials);
+    Xkf     = zeros(nr,nTrials);
+    Sn      = zeros(nr,nTrials);
+    A       = [-b/m];
+    B       = [1/m];
+    C       = [1];
+    D       = [0];
+    cruise_sys = ss(A,B,C,D);
+    % Simulate closed loop
+    dt     = Ts;
+    t      = tr';
+    n      = length(t);
+    % u_star for 0 < t < 60
+    x      = zeros(n,2);
+    u_star = u0*ones(n,2);
+    u_star0= u0*ones(n,1);
+    for i = 1:100
+        u_star0(i) = u0/10*t(i);
+    end
+    u_star(:,1) = u_star0;
+    u_star(:,2) = u_star0;
+    % left and right lane targets
+    Tstart   = 30.1;
+    Tend     = 40;
+    Ustart   = u0;
+    Uend     = u0;
+    Xstart   = u_star(300) + u0*10;   % t = 20
+    Xend1    = u_star(300) + u0*20 + s/4;
+    Xend2    = u_star(300) + u0*20 - s/4;
+    Tab3     = table(Tstart,Tend,Ustart,Uend,Xstart,Xend1)
+    u_star(301:400,1) = Step124(Tstart,Tend,Ustart,Uend,Xstart,Xend1,Ts);
+    u_star(301:400,2) = Step124(Tstart,Tend,Ustart,Uend,Xstart,Xend2,Ts);
+    % Linear Quadratic Regulator (LQR) for left and right lanes
+    for i = 1:nTrials
+        ustar    = u_star(:,1);
+        [u1,sys] = Step134(cruise_sys,ustar,t);
+        ustar    = u_star(:,2);
+        [u2,sys] = Step134(cruise_sys,ustar,t);
+        if i == 1
+            U1 = u1;
+            U2 = u2;
+        else
+            U1 = [U1 u1];
+            U2 = [U2 u2];
+        end
+    end
+    xstart = -s*[0:9];
+    for k = 1:nTrials
+        x1(1) = xstart(k);
+        x2(1) = xstart(k);
+        for i = 2:n
+            x1(i) = x1(i-1) + 0.5*(U1(i-1,k) + U1(i,k))*Ts;
+            x2(i) = x2(i-1) + 0.5*(U2(i-1,k) + U2(i,k))*Ts;
+        end
+        if k == 1
+            X1 = x1';
+            X2 = x2';
+        else
+            X1 = [X1 x1'];
+            X2 = [X2 x2'];
+        end
+    end
+    D1   = [U1 X1];
+    D2   = [U2 X2]; 
+end
+
